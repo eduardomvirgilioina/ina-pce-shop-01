@@ -26,19 +26,19 @@ model items {
   producto_id     Int?
   cantidad        Int
   precio_unitario Decimal    @db.Decimal(10, 2)
-  ordenes         ordenes?   @relation(fields: [orden_id], references: [id])
-  productos       productos? @relation(fields: [producto_id], references: [id])
+  orden         ordenes?   @relation(fields: [orden_id], references: [id])
+  producto       productos? @relation(fields: [producto_id], references: [id])
 
   @@unique([orden_id, producto_id])
 }
 
 model ordenes {
   id         Int       @id @default(autoincrement())
-  usuario_id Int?
+  usuario_id Int
   total      Decimal   @db.Decimal(10, 2)
   estado     String?   @default("pendiente") @db.VarChar(50)
   items      items[]
-  usuarios   usuarios? @relation(fields: [usuario_id], references: [id])
+  usuario   usuarios? @relation(fields: [usuario_id], references: [id])
 }
 
 

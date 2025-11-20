@@ -6,11 +6,12 @@ import {
   update,
   remove,
 } from "../controllers/compras.controller.js";
+import { isAdmin } from "../middlewares/admin.js";
 
 const router = Router();
-router.get("/", list);
+router.get("/", [isAdmin], list);
 router.get("/:id", get);
 router.post("/", create);
-router.put("/:id", update);
-router.delete("/:id", remove);
+router.put("/:id", [isAdmin], update);
+router.delete("/:id", [isAdmin], remove);
 export default router;
