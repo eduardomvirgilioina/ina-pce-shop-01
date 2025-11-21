@@ -11,6 +11,19 @@ export function isLogged() {
   return usuario;
 }
 
+export function getCart() {
+  let carrito = localStorage.getItem("carrito") ?? null;
+  if (carrito) {
+    carrito = JSON.parse(carrito);
+  }
+  return carrito ? carrito : [];
+}
+
+export function setCart(data = []) {
+  localStorage.setItem("carrito", JSON.stringify(data));
+  return getCart();
+}
+
 export function currency(amount) {
   return new Intl.NumberFormat("es-AR", {
     style: "currency",
@@ -48,9 +61,9 @@ export async function sendJsonData(url = "", method = "POST", data = {}) {
   return response.json();
 }
 
-export async function sendQueryParams(url = "", data = {}) {
-  let params = new URLSearchParams(data).toString();
-  const response = await fetch(`${url}?${params}`, {
+export async function sendQuery(url = "", data = {}) {
+  let params = data ? new URLSearchParams(data).toString() : null;
+  const response = await fetch(`${url}${params ? `?${params}` : ""}`, {
     method: "GET",
   });
   return response.json();

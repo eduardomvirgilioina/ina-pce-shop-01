@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <nav>
+        <a href="perfil.html">Volver al Perfil</a>
+        <a href="index.html">Ir a la tienda</a>
+        <a href="carrito.html">Ir al Carrito</a>
+    </nav>
+    <main>
+
+    </main>
+
+    <script type="module">
+        const params = new URLSearchParams(location.search)
+        const id = Number(params.get("id"))
+        console.log(id)
+        document.title = `Compra | Numero ${id}`
+        const req = await fetch(`/api/compras/${id}`)
+        const res = await req.json()
+        const main = document.querySelector("main")
+        main.innerHTML = `<pre>${JSON.stringify(res,null,2)}</pre>`
+    </script>
+</body>
+</html>

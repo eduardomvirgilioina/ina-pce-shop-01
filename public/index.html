@@ -15,39 +15,14 @@
     <nav id="userBar">
         <a href="perfil.html">Perfil</a>
         <a href="carrito.html">Carrito</a>
+        <a id="logout" href="index.html">Salir</a>
     </nav>
     <main>
         <header>
             <h1>Nuestra Tienda</h1>
         </header>
-        <ul>
-            <li>
-                <picture>
-                    <img src="http://placehold.co/400/orange/white?text=R1" alt="">
-                </picture>
-                <dl>
-                    <dt>Nombre</dt>
-                    <dd>Remera N° 1</dd>
-                    <dt>Detalle</dt>
-                    <dd>
-                        Detalle Remera N° 1
-                    </dd>
-                    <dt>Categoria</dt>
-                    <dd>Ropa</dd>
-                    <dt>Precio</dt>
-                    <dd>$100.000 ARS</dd>
-                </dl>
-                <ul>
-                    <li>ropa</li>
-                    <li>joven</li>
-                </ul>
-                <form>
-                    <button type="button">
-                        Añadir al Carrito
-                    </button>
-                </form>
-            </li>
-        </ul>
+        <span id="loader">Cargando...</span>
+        <ul id="productos"></ul>
     </main>
     <!-- Cualquier Ruta /carpeta/archivo -->
     <script type="module" src="/js/main.js"></script>
