@@ -1,26 +1,34 @@
 import { PrismaClient } from "../generated/prisma/client.js";
 const prisma = new PrismaClient();
 export async function list(req, res) {
-  let page = req?.query?.page || 1;
-  let limit = req?.query?.limit || 10;
-  page = parseInt(page);
-  limit = parseInt(limit);
-  const offset = (page - 1) * limit;
+  // let page = req?.query?.page || 1;
+  // let limit = req?.query?.limit || 10;
+  // page = parseInt(page);
+  // limit = parseInt(limit);
+  // const offset = (page - 1) * limit;
   const products = await prisma.productos.findMany({
     where: {
-      AND: [
-        { nombre: { contains: req?.query?.search ?? "" } },
-        { descripcion: { contains: req?.query?.search ?? "" } },
+      OR: [
+        {
+          nombre: {
+            contains: req?.query?.search || "",
+          },
+        },
+        {
+          descripcion: {
+            contains: req?.query?.search || "",
+          },
+        },
       ],
     },
     include: {
       categorias: true,
       etiquetas: true,
     },
-    skip: offset,
-    take: limit,
+    // skip: offset,
+    // take: limit,
   });
-  return res.send(products);
+  return res.send({ products, query: req.query });
 }
 export async function get(req, res) {
   const { slug } = req.params;
@@ -46,7 +54,7 @@ export async function create(req, res) {
     where: { nombre: data.categoria },
   });
 
-  let categoria_id = categoria ? categoria.id : null;
+  let categoria_id = categoria ? categoria : null;
 
   if (!categoria) {
     const nuevaCategoria = await prisma.categorias.create({
@@ -54,14 +62,14 @@ export async function create(req, res) {
         nombre: data.categoria,
       },
     });
-    categoria_id = nuevaCategoria.id;
+    categoria_id = nuevaCategoria;
   }
 
   // Asignar etiquetas si se proporcionan
 
   let etiquetaIds = [];
-  if (data["etiquetas"] && Array.isArray(data["etiquetas"])) {
-    for (const etiqueta of data["etiquetas"]) {
+  if (data["etiquetas"] && Array.isArray(data["etiquetas"].split(","))) {
+    for (const etiqueta of data["etiquetas"].split(",")) {
       let select = await prisma.etiquetas.findUnique({
         where: { nombre: etiqueta.trim() },
       });
@@ -73,7 +81,6 @@ export async function create(req, res) {
       etiquetaIds.push({ id: select.id });
     }
   }
-
   // Crear el producto
   const newProduct = await prisma.productos.create({
     data: {
@@ -81,13 +88,10 @@ export async function create(req, res) {
       slug: data.slug,
       descripcion: data.descripcion,
       precio: parseFloat(data.precio),
-      categoria_id: parseInt(categoria_id),
+      categorias: { connect: { id: categoria_id.id } },
       imagen_url: files ? `/uploads/${files[0].filename}` : null,
-      etiquetas: { set: etiquetaIds || [] },
-    },
-    include: {
-      categorias: true,
-      etiquetas: true,
+      etiquetas:
+        etiquetaIds.length > 0 ? { connect: etiquetaIds } : { connect: [] },
     },
   });
 
@@ -104,7 +108,7 @@ export async function update(req, res) {
     where: { nombre: data.categoria },
   });
 
-  let categoria_id = categoria ? categoria.id : null;
+  let categoria_id = categoria ? categoria : null;
 
   if (!categoria) {
     const nuevaCategoria = await prisma.categorias.create({
@@ -112,14 +116,14 @@ export async function update(req, res) {
         nombre: data.categoria,
       },
     });
-    categoria_id = nuevaCategoria.id;
+    categoria_id = nuevaCategoria;
   }
 
   // Asignar etiquetas si se proporcionan
 
   let etiquetaIds = [];
-  if (data["etiquetas"] && Array.isArray(data["etiquetas"])) {
-    for (const etiqueta of data["etiquetas"]) {
+  if (data["etiquetas"] && Array.isArray(data["etiquetas"].split(","))) {
+    for (const etiqueta of data["etiquetas"].split(",")) {
       let select = await prisma.etiquetas.findUnique({
         where: { nombre: etiqueta.trim() },
       });
@@ -145,7 +149,7 @@ export async function update(req, res) {
       slug: data.slug || product.slug,
       descripcion: data.descripcion || product.descripcion,
       precio: parseFloat(data.precio) || product.precio,
-      categoria_id: parseInt(categoria_id) || product.categoria_id,
+      categoria_id: { connect: { id: categoria_id.id } },
       imagen_url: files ? `/uploads/${files[0].filename}` : product.imagen_url,
       etiquetas: { set: etiquetaIds || [] },
     },

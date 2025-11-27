@@ -13,7 +13,7 @@ servidor.set("port", process.env.PORT || 3000);
 servidor.use(cors()); // Habilita CORS para todas las rutas
 servidor.use(morgan("dev")); // Registra las peticiones HTTP en la consola
 servidor.use(express.json()); // Parseo de peticiones con body application/json
-servidor.use(express.urlencoded({ extended: false })); // Parseo de peticiones con body y query
+servidor.use(express.urlencoded({ extended: true })); // Parseo de peticiones con body y query
 
 servidor.use(
   express.static(join(dirname(fileURLToPath(import.meta.url)), "../public"))
