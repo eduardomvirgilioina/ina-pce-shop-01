@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear Producto</title>
+</head>
+<body>
+    <form id="productForm">
+        <fieldset>
+            <label for="nombre">Nombre</label>
+            <input type="text" name="nombre" id="nombre" placeholder="Nombre del producto">
+        </fieldset>
+        <fieldset>
+            <label for="slug">alias</label>
+            <input type="text" name="slug" id="slug" placeholder="Alias del producto">
+        </fieldset>
+        <fieldset>
+            <label for="categoria">Categoria</label>
+            <input type="text" name="categoria" id="categoria" placeholder="Categoria del producto">
+        </fieldset>
+        <fieldset>
+            <label for="precio">precio</label>
+            <input type="number" min="0" step="1" name="precio" id="precio" placeholder="precio del producto">
+        </fieldset>
+        <fieldset>
+            <label for="etiquetas">etiquetas</label>
+            <input type="text" name="etiquetas" id="etiquetas" placeholder="etiquetas del producto, separadas por comas">
+        </fieldset>
+        <fieldset>
+            <label for="imagen">imagen</label>
+            <input type="file" name="imagen" id="imagen">
+        </fieldset>
+        <fieldset>
+            <label for="descripcion">descripcion</label>
+            <textarea name="descripcion" id="descripcion" placeholder="descripcion del producto"></textarea>
+        </fieldset>
+        <button type="submit">Crear Producto</button>
+    </form>
+    <script type="module" src="/js/admin_add_product.js"></script>
+</body>
+</html>

@@ -28,7 +28,7 @@ export async function list(req, res) {
     // skip: offset,
     // take: limit,
   });
-  return res.send({ products, query: req.query });
+  return res.send(products);
 }
 export async function get(req, res) {
   const { slug } = req.params;

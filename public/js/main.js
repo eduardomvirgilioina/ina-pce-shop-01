@@ -36,7 +36,9 @@ const generateListProducts = (productos) => {
     const tagsContaner = document.createElement("ul");
     const actionForm = document.createElement("form");
 
-    imageContainer.innerHTML = `<img src="${producto.imagen_url}" alt="Imagen del producto ${producto.slug}"/>`;
+    imageContainer.innerHTML = producto.imagen_url
+      ? `<img src="${producto.imagen_url}" alt="Imagen del producto ${producto.slug}"/>`
+      : `<img src="http://placehold.co/400/orange/white?text=Sin%20Imagen" alt="Sin imagen disponible"/>`;
     dataContainer.innerHTML = `<dt>Nombre</dt>
                     <dd>${producto.nombre}</dd>
                     <dt>Detalle</dt>

@@ -37,24 +37,36 @@ export function formatDate(dateString) {
   return date.toLocaleDateString("es-AR", options);
 }
 
-export async function sendFormData(url = "", method = "POST", data = {}) {
+export async function sendFormData(
+  url = "",
+  method = "POST",
+  data = {},
+  headers = {}
+) {
   let body = new FormData();
   for (const key in data) {
     body.append(key, data[key]);
   }
   const response = await fetch(url, {
     method,
+    headers,
     body,
   });
   return response.json();
 }
 
-export async function sendJsonData(url = "", method = "POST", data = {}) {
+export async function sendJsonData(
+  url = "",
+  method = "POST",
+  data = {},
+  headers = {}
+) {
   let body = JSON.stringify(data);
   const response = await fetch(url, {
     method,
     headers: {
       "Content-Type": "application/json",
+      ...headers,
     },
     body,
   });
